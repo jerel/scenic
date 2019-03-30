@@ -362,6 +362,51 @@ defmodule Scenic.Components do
 
   # --------------------------------------------------------
   @doc """
+  Add a [`Modal`](Scenic.Component.Modal.html) to a graph
+
+  ### Examples
+
+  The following example creates a modal 450px wide and 200px high.
+
+      modal(
+        graph,
+        fn g ->
+          g
+          |> text("Title Bar", translate: {20, 40}, fill: {0, 0, 0}, font_size: 26)
+          |> text("Content text", translate: {20, 90}, fill: {0, 0, 0}, font_size: 18)
+          |> button("CANCEL", id: :close_modal, translate: {270, 150}, theme: :text)
+          |> button("OK", id: :proceed, translate: {385, 150}, theme: :text)
+        end,
+        size: {450, 200}
+      )
+  """
+  @spec modal(
+          source :: Graph.t(),
+          data :: module() | {module(), any()} | (Scenic.Graph.t() -> Scenic.Graph.t()),
+          options :: list
+        ) :: Graph.t()
+  def modal(graph, data, options \\ [])
+
+  def modal(%Graph{} = g, data, options) do
+    Scenic.Component.Modal.open(g, data, options)
+  end
+
+  @doc """
+  Remove a [`Modal`](Scenic.Component.Modal.html) from a graph
+
+  ### Examples
+
+  The following example removes an open modal.
+
+      modal_dismiss(graph)
+  """
+  @spec modal_dismiss(source :: Graph.t()) :: Graph.t()
+  def modal_dismiss(%Graph{} = g) do
+    Scenic.Component.Modal.dismiss(g)
+  end
+
+  # --------------------------------------------------------
+  @doc """
   Add a [`RadioGroup`](Scenic.Component.Input.RadioGroup.html) to a graph
 
   ### Data
