@@ -13,11 +13,26 @@ defmodule Scenic.Component.Modal do
   ```
 
   The modal sends a `{:modal {:click, :dismiss_modal}}` event up to the parent scene when
-  the user clicks the shadow area of the modal. All other events are sent to the parent as
-  well in the form of `{:modal, event}`. In the parent scene:
+  the user clicks the shadow area of the modal and your Cancel button can do so as well.
+  All other events are bubbled to the parent as well in the form of `{:modal, event}`.
+
+  Example:
   ```
+  def filter_event({:click, :open_modal}, _, graph) do
+    builder = fn graph ->
+      graph
+      |> text("Title Text", translate: {20, 40}, fill: {0, 0, 0}, font_size: 26)
+      |> text("Body text", translate: {20, 90}, fill: {0, 0, 0}, font_size: 18)
+      |> button("CANCEL", id: :dismiss_modal, translate: {270, 150}, theme: :text)
+      |> button("OK", id: :proceed, translate: {385, 150}, theme: :text)
+    end
+
+    {:noreply, Modal.open(graph, builder, size: {450, 200})}
+  end
+
   def filter_event({:modal, {:click, :dismiss_modal}}, _, graph) do
-    graph = Modal.close(graph)
+    graph = Modal.dismiss(graph)
+
     {:halt, graph, push: graph}
   end
   ```
